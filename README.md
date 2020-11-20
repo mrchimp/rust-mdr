@@ -10,7 +10,7 @@ It kind of works! Could probably be better. I've never made anything with Rust b
 
 Readmes are good. They should be read. What if there was a really quick way to read them. A way not much slower than `cat` but with colours and stuff? That'd be neat.
 
-This is a remake of [mdr](https://github.com/mrchimp/mdr) which I slapped together in Node which is fine but slow to launch.
+This is a remake of [mdr](https://github.com/mrchimp/mdr) which I slapped together in Node. That was fine but slow to launch.
 
 ## Usage
 
@@ -19,16 +19,20 @@ This is a remake of [mdr](https://github.com/mrchimp/mdr) which I slapped togeth
 mdr
 
 # Open test.md
+mdr -f test.md
 mdr --file test.md
 
 # Open README.md from this Github repo. Meta!
+mdr -g mrchimp/rust-mdr
 mdr --github mrchimp/rust-mdr
 
 # Open README.md from a Bitbucket repo
+mdr -b somebitbucket/repo
 mdr --bitbucket somebitbucket/repo
 
 # Open README.md from another branch
-mdr --github mrchimp/rust-mdr --branch other_branch
+mdr -g mrchimp/rust-mdr -b other_branch
+mdr -g mrchimp/rust-mdr --branch other_branch
 ```
 
 ## Todo
