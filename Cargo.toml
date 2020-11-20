@@ -11,3 +11,4 @@ structopt = "0.3.13"
 termimad = "0.8.30"
 crossterm = "0.17.7"
 minimad = "0.6.7"
+reqwest = { version = "0.10", features = ["blocking"] }

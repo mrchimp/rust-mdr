@@ -9,7 +9,7 @@ use termimad::MadSkin;
 struct Cli {
     /// File to read
     // #[structopt(short, long, default_value = "README.md")]
-    #[structopt(short, long)]
+    #[structopt(short, long, default_value = "README.md")]
     file: String,
 
     /// Get file from Github repository
@@ -21,8 +21,8 @@ struct Cli {
     bitbucket: Option<String>,
 
     /// Git branch to fetch file from
-    #[structopt(short = "B", long = "branch")]
-    branch: Option<String>,
+    #[structopt(short = "B", long = "branch", default_value = "master")]
+    branch: String,
 
     /// Show help message
     #[structopt(short, long)]
@@ -56,21 +56,59 @@ fn get_file_content(file_name: PathBuf) -> String {
     };
 }
 
+fn get_github_file(repo: &str, branch: &str, file: &str) -> Result<(), Box<dyn std::error::Error>> {
+    let url = format!("https://github.com/{}/raw/{}/{}", repo, branch, file);
+    let res = reqwest::blocking::get(&url)?.text()?;
+
+    render_content(&res);
+
+    Ok(())
+}
+
+fn get_bitbucket_file(
+    repo: &str,
+    branch: &str,
+    file: &str,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let url = format!("https://bitbucket.org/{}/raw/{}/{}", repo, branch, file);
+    let res = reqwest::blocking::get(&url)?.text()?;
+
+    render_content(&res);
+
+    Ok(())
+}
+
 fn main() {
     let args = Cli::from_args();
     println!("{:?}", args);
 
-    if args.github != None {
-        println!("Github!");
-        return;
+    match args.github {
+        None => {}
+        Some(repo) => {
+            let response = get_github_file(&repo, &args.branch, &args.file);
+
+            match response {
+                Ok(_r) => {}
+                Err(_e) => {}
+            };
+
+            return;
+        }
     }
 
-    if args.bitbucket != None {
-        println!("Bitbucket!");
-        return;
-    }
+    match args.bitbucket {
+        None => {}
+        Some(repo) => {
+            let response = get_bitbucket_file(&repo, &args.branch, &args.file);
 
-    println!("Opening file name: {}", args.file);
+            match response {
+                Ok(_r) => {}
+                Err(_e) => {}
+            };
+
+            return;
+        }
+    }
 
     let file = PathBuf::from(args.file);
     let content = get_file_content(file);
