@@ -80,7 +80,6 @@ fn get_bitbucket_file(
 
 fn main() {
     let args = Cli::from_args();
-    println!("{:?}", args);
 
     match args.github {
         None => {}
