@@ -58,9 +58,14 @@ fn get_file_content(file_name: PathBuf) -> String {
 
 fn get_github_file(repo: &str, branch: &str, file: &str) -> Result<(), Box<dyn std::error::Error>> {
     let url = format!("https://github.com/{}/raw/{}/{}", repo, branch, file);
-    let res = reqwest::blocking::get(&url)?.text()?;
+    let res = reqwest::blocking::get(&url)?;
 
-    render_content(&res);
+    if res.status().is_server_error() {
+        println!("Could not load remote file.");
+        return Ok(());
+    }
+
+    render_content(&res.text()?);
 
     Ok(())
 }
@@ -71,9 +76,14 @@ fn get_bitbucket_file(
     file: &str,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let url = format!("https://bitbucket.org/{}/raw/{}/{}", repo, branch, file);
-    let res = reqwest::blocking::get(&url)?.text()?;
+    let res = reqwest::blocking::get(&url)?;
 
-    render_content(&res);
+    if res.status() != 200 {
+        println!("Could not load remote file.");
+        return Ok(());
+    }
+
+    render_content(&res.text()?);
 
     Ok(())
 }
