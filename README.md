@@ -42,3 +42,23 @@ mdr -g mrchimp/rust-mdr --branch other_branch
 - Optimise some stuff?
 - Make code better?
 - Maybe just use [minimad](https://docs.rs/minimad/0.6.7/minimad/) instead of [termimad](https://github.com/Canop/termimad)?
+
+## Compiling for OSX
+
+### From OSX Host
+
+Just compile as normal:
+
+```bash
+cargo build --release
+```
+
+### From Linux Host
+
+```bash
+# Install osxcross and other dependencies
+./install_osx.sh
+
+# Build for OSX
+./build_osx.sh
+```
