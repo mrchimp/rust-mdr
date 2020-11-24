@@ -45,17 +45,6 @@ fn render_content(content: &str) {
     println!("\n");
 }
 
-fn get_file_content(file_name: PathBuf) -> String {
-    let result = std::fs::read_to_string(file_name);
-
-    return match result {
-        Ok(content) => content,
-        Err(error) => {
-            panic!("Could not open file. Error: {}", error);
-        }
-    };
-}
-
 fn get_github_file(repo: &str, branch: &str, file: &str) -> Result<(), Box<dyn std::error::Error>> {
     let url = format!("https://github.com/{}/raw/{}/{}", repo, branch, file);
     let res = reqwest::blocking::get(&url)?;
@@ -120,7 +109,14 @@ fn main() {
     }
 
     let file = PathBuf::from(args.file);
-    let content = get_file_content(file);
+    let result = std::fs::read_to_string(file);
+    let content = match result {
+        Ok(content) => content,
+        Err(_error) => {
+            println!("Could not open file.");
+            return;
+        }
+    };
 
     render_content(&content);
 }
